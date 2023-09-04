@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>调用讯飞星火API</title>
+</head>
+<body>
+  <h1>问题回答页面</h1>
+  <form id="questionForm">
+    <label for="question">请输入您的问题：</label><br>
+    <input type="text" id="question" name="question"><br>
+    <input type="submit" value="提交">
+  </form>
+  <div id="answer"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#questionForm').submit(function(event) {
+        event.preventDefault(); // 阻止表单提交的默认行为
+        var question = $('#question').val(); // 获取用户输入的问题
+        var apiKey = 'YOUR_API_KEY'; // 替换为您自己的讯飞星火API密钥
+        var url = 'https://openapi.xfyun.cn/v2/ask?version=2.0&apikey=' + apiKey; // 讯飞星火API的URL，需要替换为您自己的API密钥
+
+        // 发送POST请求到讯飞星火API
+        $.ajax({
+          type: 'POST',
+          url: url,
+          data: JSON.stringify({ 'query': question }),
+          contentType: 'application/json',
+          dataType: 'json',
+          success: function(response) {
+            var answer = response.results[0].answer; // 获取API返回的答案
+            $('#answer').text(answer); // 将答案显示在页面上
+          },
+          error: function(error) {
+            console.log('发生错误：', error);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
